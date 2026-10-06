@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Uzman Klinik Psikolog İlayda Akyıl Gürkan. Bireysel, aile, çocuk ve ergen, oyun, masal, grup ve online terapi. Bakırköy ve Kadıköy, İstanbul.">
+  <meta name="theme-color" content="#193f36">
+  <meta property="og:title" content="İlayda Akyıl Gürkan · Uzman Klinik Psikolog">
+  <meta property="og:description" content="Kendinize iyi gelen bir başlangıç. Bakırköy · Kadıköy · Online.">
+  <meta property="og:type" content="website">
+  <title>İlayda Akyıl Gürkan · Uzman Klinik Psikolog</title>
+  <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/portrait-hero.webp" as="image" fetchpriority="high">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="motion.css">
+  <script src="app.js" defer></script>
+  <script src="assets/three.min.js" defer></script>
+  <script src="motion.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">İçeriğe geç</a>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <symbol id="mark" viewBox="0 0 64 64"><path d="M32 54V21M32 41C12 41 8 25 12 10c16 1 22 13 20 31ZM32 32C32 15 43 8 54 10c0 15-8 23-22 22Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="arrow-up" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="star" viewBox="0 0 48 48"><path d="M24 3c0 15-6 21-21 21 15 0 21 6 21 21 0-15 6-21 21-21C30 24 24 18 24 3Z" fill="none" stroke="currentColor" stroke-width="1.2"/></symbol>
+      <symbol id="pin" viewBox="0 0 24 24"><path d="M19 10c0 5-7 11-7 11S5 15 5 10a7 7 0 1 1 14 0Z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+      <symbol id="play" viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="pause" viewBox="0 0 24 24"><path d="M8 6v12m8-12v12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></symbol>
+      <symbol id="mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/></symbol>
+      <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="splash" id="splash" aria-hidden="true">
+    <div class="splash-halo"></div><div class="splash-portal" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div class="splash-content">
+      <svg class="splash-mark" viewBox="0 0 64 64"><use href="#mark"/></svg>
+      <span class="splash-kicker">KENDİNİZE AYIRDIĞINIZ BİR AN</span>
+      <p>Her başlangıç,<br><em>bir nefesle.</em></p>
+      <div class="splash-line"><span></span></div>
+      <div class="splash-name">İlayda Akyıl Gürkan<small>UZMAN KLİNİK PSİKOLOG</small></div>
+    </div>
+    <button class="splash-skip" id="splash-skip" tabindex="-1">Siteye geç <svg><use href="#arrow"/></svg></button>
+    <span class="splash-corner">BAKIRKÖY · KADIKÖY · ONLINE</span>
+  </div>
+  <div class="ambient-world" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="pointer-aura" id="pointer-aura" aria-hidden="true"></div>
+  <div class="reading-progress" aria-hidden="true"><span id="reading-progress"></span></div>
+
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="İlayda Akyıl Gürkan, ana sayfa">
+        <svg class="brand-mark"><use href="#mark"/></svg>
+        <span>İlayda Akyıl Gürkan<small>UZMAN KLİNİK PSİKOLOG</small></span>
+      </a>
+      <nav class="desktop-nav" aria-label="Ana menü">
+        <a href="#hakkimda">Hakkımda</a>
+        <a href="#hizmetler">Çalışma alanları</a>
+        <a href="#surec">Terapi süreci</a>
+        <a href="#sss">Sorularınız</a>
+      </nav>
+      <div class="header-actions">
+        <a class="button button-small header-cta" href="#iletisim">Randevu talebi <svg><use href="#arrow-up"/></svg></a>
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menüyü aç" aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+  <dialog class="mobile-menu" id="mobile-menu" aria-label="Gezinme menüsü">
+    <div class="mobile-menu-top"><span class="micro">BİRLİKTE BİR BAŞLANGIÇ</span><button class="icon-button" id="menu-close" aria-label="Menüyü kapat">×</button></div>
+    <nav aria-label="Mobil menü">
+      <a href="#hakkimda"><span>01</span> Hakkımda <svg><use href="#arrow-up"/></svg></a>
+      <a href="#hizmetler"><span>02</span> Çalışma alanları <svg><use href="#arrow-up"/></svg></a>
+      <a href="#surec"><span>03</span> Terapi süreci <svg><use href="#arrow-up"/></svg></a>
+      <a href="#mola"><span>04</span> Bir nefes molası <svg><use href="#arrow-up"/></svg></a>
+      <a href="#sss"><span>05</span> Sorularınız <svg><use href="#arrow-up"/></svg></a>
+    </nav>
+    <a class="button" href="#iletisim">İlk adımı atın <svg><use href="#arrow-up"/></svg></a>
+    <div class="mobile-menu-bottom">İlayda Akyıl Gürkan<small>BAKIRKÖY · KADIKÖY · ONLINE</small></div>
+  </dialog>
+
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-ambient" aria-hidden="true"></div><div class="psych-backdrop psych-hero" aria-hidden="true"><img src="assets/psychology-mind.svg" alt="" width="800" height="800"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow hero-enter" style="--i:0"><span class="tiny-star">✳</span> KENDİNİZE YER AÇIN</div>
+          <h1 id="hero-title"><span class="hero-line"><span style="--i:1">Kendinize</span></span><span class="hero-line"><span style="--i:2"><em>iyi gelen</em></span></span><span class="hero-line"><span style="--i:3">bir başlangıç.</span></span></h1>
+          <p class="hero-description hero-enter" style="--i:4">Bazen kendinizi anlamak, bazen çocuğunuza eşlik etmek için… Sizin hikâyenize, ihtiyaçlarınıza ve hızınıza alan açan bir terapi süreci.</p>
+          <div class="hero-actions hero-enter" style="--i:5"><a class="button" href="#iletisim">İlk adımı birlikte atalım <svg><use href="#arrow-up"/></svg></a><a class="text-link" href="#hakkimda">Beni tanıyın <svg><use href="#arrow"/></svg></a></div>
+          <div class="hero-location hero-enter" style="--i:6"><svg><use href="#pin"/></svg><span>Bakırköy <i>·</i> Kadıköy <i>·</i> Online</span></div>
+        </div>
+        <div class="hero-visual hero-enter" style="--i:3" id="hero-visual">
+          <div class="hero-gl-wrap" aria-hidden="true"><canvas id="hero-gl"></canvas><div class="glass-fallback"><i></i><i></i><i></i></div></div>
+          <div class="orbiting-note note-one"><span class="glass-dot"></span> Sizin hızınızda.</div>
+          <div class="orbiting-note note-two"><svg><use href="#star"/></svg> Her hikâye kendine özel.</div>
+          <div class="portrait-outline" aria-hidden="true"></div>
+          <span class="portrait-side-note" aria-hidden="true">HER HİKÂYE KENDİNE ÖZELDİR</span>
+          <div class="portrait-frame"><img class="hero-portrait" src="assets/portrait-hero.webp" width="960" height="1376" alt="Uzman Klinik Psikolog İlayda Akyıl Gürkan" fetchpriority="high"></div>
+          <svg class="portrait-star" aria-hidden="true"><use href="#star"/></svg>
+          <div class="portrait-caption"><span class="caption-rule"></span><div>İlayda Akyıl Gürkan<small>Uzman Klinik Psikolog</small></div></div>
+          <div class="hero-note"><svg><use href="#mark"/></svg><p>Anlaşılmak için<br><em>güvenli bir alan.</em></p></div>
+        </div>
+      </div>
+      <div class="container hero-bottom hero-enter" style="--i:7"><a class="scroll-cue" href="#yaklasim"><span class="scroll-mouse"><i></i></span> KEŞFETMEYE DEVAM EDİN</a><div class="hero-values"><span>Her yaşa özel yaklaşım</span><span>Yüz yüze & online</span><span>Sizin hızınızda</span></div><span class="hero-index" aria-hidden="true">01 / BİR BAŞLANGIÇ</span></div>
+    </section>
+
+    <section class="approach" id="yaklasim" aria-labelledby="approach-title">
+      <div class="psych-backdrop psych-approach" aria-hidden="true"><img src="assets/psychology-empathy.svg" alt="" width="800" height="800"></div><div class="container approach-grid">
+        <div data-reveal><span class="eyebrow light">BİRLİKTE, SİZİN HIZINIZDA</span><h2 id="approach-title" class="scroll-quote">Her hikâye dinlenmeyi,<br>her duygu <em>anlaşılmayı</em><br>hak eder.</h2></div>
+        <div class="approach-aside" data-reveal><svg class="approach-flower" aria-hidden="true" viewBox="0 0 160 160"><g fill="none" stroke="currentColor" stroke-width=".8"><ellipse cx="80" cy="80" rx="27" ry="66"/><ellipse cx="80" cy="80" rx="27" ry="66" transform="rotate(60 80 80)"/><ellipse cx="80" cy="80" rx="27" ry="66" transform="rotate(120 80 80)"/><circle cx="80" cy="80" r="12"/></g></svg><p>Bir şeyleri hemen çözmeniz ya da nasıl anlatacağınızı bilmeniz gerekmez. Başlangıç, kendinize bir alan açmak olabilir.</p><a class="text-link text-link-light" href="#surec">Terapi sürecini tanıyın <svg><use href="#arrow"/></svg></a></div>
+      </div>
+    </section>
+
+    <section class="services section-space" id="hizmetler" aria-labelledby="services-title">
+      <div class="container">
+        <div class="section-heading" data-reveal><div><span class="eyebrow">ÇALIŞMA ALANLARIM</span><h2 id="services-title">Her ihtiyaca,<br><em>kendine özel bir alan.</em></h2></div><p>Hangi çalışmanın size uygun olduğundan emin değilseniz, bunu ilk görüşmede birlikte netleştirebiliriz.</p></div>
+        <div class="service-filters" id="service-filters" role="group" aria-label="Çalışma alanı kategorisi" data-reveal><button type="button" class="is-active" data-filter="all" aria-pressed="true">Tüm alanlar <span>08</span></button><button type="button" data-filter="adult" aria-pressed="false">Yetişkin</button><button type="button" data-filter="family" aria-pressed="false">Çocuk & aile</button><button type="button" data-filter="online" aria-pressed="false">Online</button></div>
+        <div class="service-explorer">
+          <div class="service-list" id="service-list" data-reveal>
+            <details class="service-row" data-category="adult" data-service="individual" open><summary><span class="service-no">01</span><h3>Bireysel terapi</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Duygularınızı, düşüncelerinizi ve yaşadığınız güçlükleri size özel bir görüşme alanında ele alırız. İhtiyaçlarınızı anlamaya ve kendinizle ilişkinizi keşfetmeye birlikte odaklanırız.</p><a class="text-link" href="#iletisim" data-topic="Bireysel terapi">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+            <details class="service-row" data-category="adult family" data-service="family"><summary><span class="service-no">02</span><h3>Aile terapisi</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Aile içindeki iletişimi, ilişkileri ve birlikte yaşanan güçlükleri ele alırız. Her aile üyesinin kendini ifade edebildiği bir çalışma alanı oluşturmayı amaçlarız.</p><a class="text-link" href="#iletisim" data-topic="Aile terapisi">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+            <details class="service-row" data-category="family" data-service="parent"><summary><span class="service-no">03</span><h3>Ebeveyn danışmanlığı</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Çocuğunuzu anlamak, ihtiyaçlarını fark etmek ve ebeveynlik sürecindeki sorularınızı ele almak için birlikte çalışırız. Yaşına ve sizin aile yaşamınıza uygun bir çerçeve oluştururuz.</p><a class="text-link" href="#iletisim" data-topic="Ebeveyn danışmanlığı">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+            <details class="service-row" data-category="family" data-service="child"><summary><span class="service-no">04</span><h3>Çocuk & ergen terapisi</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Çocukların ve gençlerin yaşadıklarını, duygularını ve ilişkilerini gelişim dönemlerine uygun biçimde ele alırız. Süreci çocuğun ya da ergenin ihtiyaçları doğrultusunda şekillendiririz.</p><a class="text-link" href="#iletisim" data-topic="Çocuk ve ergen terapisi">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+            <details class="service-row" data-category="family" data-service="play"><summary><span class="service-no">05</span><h3>Oyun terapisi</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Oyun, çocukların kendilerini ifade etme yollarından biridir. Duygularını ve deneyimlerini oyun yoluyla paylaşabildikleri, yaşlarına uygun bir terapi alanı sunarız.</p><a class="text-link" href="#iletisim" data-topic="Oyun terapisi">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+            <details class="service-row" data-category="family" data-service="story"><summary><span class="service-no">06</span><h3>Masal terapisi</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Masallar ve hikâyeler üzerinden duyguların ifade edilmesine alan açarız. Çalışma biçimi ve kullanılan hikâyeler çocuğun yaşına ve ihtiyaçlarına göre belirlenir.</p><a class="text-link" href="#iletisim" data-topic="Masal terapisi">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+            <details class="service-row" data-category="adult" data-service="group"><summary><span class="service-no">07</span><h3>Grup terapisi</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Belirli bir çalışma çerçevesinde, bir grup içinde deneyimlerin paylaşılmasına ve ilişkilerin ele alınmasına odaklanırız. Güncel grup çalışmaları hakkında bilgi almak için iletişime geçebilirsiniz.</p><a class="text-link" href="#iletisim" data-topic="Grup terapisi">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+            <details class="service-row" data-category="online" data-service="online"><summary><span class="service-no">08</span><h3>Online terapi</h3><span class="service-plus"><svg><use href="#plus"/></svg></span></summary><div class="service-description"><p>Yüz yüze görüşme için aynı yerde bulunamadığımızda, görüntülü görüşmeyle bir araya geliriz. Online çalışmanın ihtiyaçlarınıza uygunluğunu görüşme öncesinde birlikte değerlendiririz.</p><a class="text-link" href="#iletisim" data-topic="Online terapi">Bu çalışma hakkında konuşalım <svg><use href="#arrow"/></svg></a></div></details>
+          </div>
+          <aside class="service-spotlight" data-reveal aria-label="Seçili çalışma alanı">
+            <div class="psych-backdrop psych-spotlight" aria-hidden="true"><img src="assets/psychology-connection.svg" alt="" width="800" height="800"></div><div class="spotlight-top"><span class="micro">SİZİN İÇİN BİR ALAN</span><span id="spotlight-number">01 / 08</span></div>
+            <div class="service-sculpture" aria-hidden="true"><canvas id="service-gl"></canvas><svg viewBox="0 0 440 380"><defs><linearGradient id="archA" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eddac0"/><stop offset="1" stop-color="#b7936c"/></linearGradient><linearGradient id="archB" x1="0" x2="1"><stop stop-color="#507567"/><stop offset="1" stop-color="#274f42"/></linearGradient><radialGradient id="sculptureShadow"><stop stop-color="#081f18" stop-opacity=".6"/><stop offset="1" stop-color="#081f18" stop-opacity="0"/></radialGradient></defs><ellipse cx="220" cy="325" rx="164" ry="29" fill="url(#sculptureShadow)"/><path class="sculpture-line" d="M68 320V168a152 152 0 0 1 304 0v152" fill="none" stroke="#bda788" stroke-opacity=".28"/><path d="M90 318V176a96 96 0 0 1 192 0v142Z" fill="url(#archA)"/><path d="M129 318V176a57 57 0 0 1 114 0v142Z" fill="#193f36"/><path d="M193 322V225a82 82 0 0 1 164 0v97Z" fill="url(#archB)"/><path d="M226 322v-97a49 49 0 0 1 98 0v97Z" fill="#193f36"/><circle class="sculpture-orb" cx="279" cy="100" r="29" fill="url(#archA)"/><path d="M115 333h257" stroke="#dbc8ab" stroke-opacity=".32"/></svg></div>
+            <div class="spotlight-bottom" id="spotlight-content"><span class="spotlight-category" id="spotlight-category">KENDİNİZLE BİR BULUŞMA</span><h3 id="spotlight-title">Bireysel terapi</h3><p id="spotlight-text">Duygularınıza ve düşüncelerinize, sizin hikâyenizden bakmak.</p><a class="spotlight-link" href="#iletisim" id="spotlight-link" data-topic="Bireysel terapi" aria-label="Bireysel terapi için randevu talebi"><svg><use href="#arrow-up"/></svg></a></div>
+          </aside>
+        </div>
+        <p class="services-footnote" id="services-footnote">Seçmek zorunda değilsiniz. <a href="#iletisim">Birlikte konuşarak başlayabiliriz. <span>↗</span></a></p>
+      </div>
+    </section>
+
+    <section class="about section-space" id="hakkimda" aria-labelledby="about-title">
+      <div class="container about-grid">
+        <div class="about-visual" data-reveal><div class="psych-backdrop psych-about" aria-hidden="true"><img src="assets/psychology-empathy.svg" alt="" width="800" height="800"></div><div class="about-photo"><img src="assets/portrait-about.webp" width="1200" height="1800" alt="Görüşme alanından bir görünüm" loading="lazy"></div><div class="about-label"><svg><use href="#mark"/></svg><span>Herkesin hikâyesi farklı.<br><em>Sizin hikâyeniz de.</em></span></div><span class="about-photo-note">BİRLİKTE ANLAMAK, BİRLİKTE İLERLEMEK</span></div>
+        <div class="about-copy" data-reveal><span class="eyebrow">HAKKIMDA</span><h2 id="about-title">Merhaba,<br><em>ben İlayda.</em></h2><p class="about-intro">Uzman Klinik Psikolog<br><strong>İlayda Akyıl Gürkan</strong></p><p>İstanbul Biruni Üniversitesi Rehberlik ve Psikolojik Danışmanlık lisansımı tamamladıktan sonra Klinik Psikoloji yüksek lisansına başladım.</p><p>Özgül öğrenme güçlüğü olan öğrencilerin akademik başarılarını etkileyen bilişsel ve motivasyonel özellikleri ile PREP'in etkililiğini inceleyen projemi tamamlayarak Uzman Klinik Psikolog unvanını aldım.</p><div class="education"><div><span class="education-dot"></span><div><strong>Biruni Üniversitesi</strong><span>Rehberlik ve Psikolojik Danışmanlık · Lisans</span></div></div><div><span class="education-dot"></span><div><strong>Klinik Psikoloji</strong><span>Yüksek lisans</span></div></div></div><details class="training"><summary>Terapi eğitimlerim <svg><use href="#plus"/></svg></summary><div class="training-tags"><span>Oyun Terapisi</span><span>Aile ve Çift Terapisi</span><span>Bilişsel Davranışçı Terapi</span><span>Bilişsel Davranışçı Oyun Terapisi</span><span>Masal Terapi</span></div></details><a class="text-link about-contact" href="#iletisim">Tanışmak için bir adım <svg><use href="#arrow-up"/></svg></a></div>
+      </div>
+    </section>
+
+    <section class="process section-space" id="surec" aria-labelledby="process-title">
+      <div class="container"><div class="section-heading" data-reveal><div><span class="eyebrow">TERAPİ SÜRECİ</span><h2 id="process-title">Küçük bir adım.<br><em>Size ait bir yolculuk.</em></h2></div><p>Her şeyin cevabını bilerek gelmeniz gerekmez. Süreci, ihtiyaçlarınız ve kendi hızınız doğrultusunda birlikte şekillendiririz.</p></div><div class="process-steps" id="process-steps"><div class="process-track" aria-hidden="true"><span></span></div><article class="process-step" data-reveal><span class="step-number">01</span><span class="step-caption">TANIŞALIM</span><h3>İlk adımı atın.</h3><p>Randevu formu veya e-posta üzerinden iletişime geçin. Yüz yüze ya da online görüşme talebinizi paylaşın.</p></article><article class="process-step" data-reveal><span class="step-number">02</span><span class="step-caption">BİRLİKTE ANLAYALIM</span><h3>Hikâyenize yer açalım.</h3><p>İlk görüşmede sizi dinler, ihtiyaçlarınızı ve beklentilerinizi konuşuruz. Çalışma biçimini birlikte değerlendiririz.</p></article><article class="process-step" data-reveal><span class="step-number">03</span><span class="step-caption">SİZİN HIZINIZDA</span><h3>Adım adım ilerleyelim.</h3><p>Görüşmelerin devamını ihtiyaçlarınıza göre planlar, süreç içinde nasıl ilerlediğimizi birlikte gözden geçiririz.</p></article></div><div class="process-note" data-reveal><svg><use href="#star"/></svg><p>Başlamak için kusursuz bir cümleye ihtiyacınız yok.</p><a href="#iletisim" aria-label="Randevu talebi oluştur"><svg><use href="#arrow-up"/></svg></a></div></div>
+    </section>
+
+    <section class="breath-section" id="mola" aria-labelledby="breath-title">
+      <div class="container"><div class="breath-panel"><div class="breath-background-lines" aria-hidden="true"></div><div class="psych-backdrop psych-breath" aria-hidden="true"><img src="assets/psychology-mind.svg" alt="" width="800" height="800"></div><div class="breath-copy" data-reveal><span class="eyebrow light">GÜNÜN İÇİNDE KÜÇÜK BİR MOLA</span><h2 id="breath-title">Bir dakika.<br><em>Sadece kendiniz için.</em></h2><p>Bir an durun. Omuzlarınızı serbest bırakın.<br>Hazır olduğunuzda, dairenin ritmine eşlik edin.</p><div class="breath-controls"><button class="button button-cream" id="breath-start" type="button"><svg id="breath-icon"><use href="#play"/></svg><span id="breath-button-text">Molayı başlat</span></button><button class="breath-reset" id="breath-reset" type="button" hidden>Başa dön</button></div><div class="breath-meta"><span>60 SANİYE</span><span>5 YAVAŞ DÖNGÜ</span></div><p class="breath-disclaimer">Bu kısa egzersiz terapinin yerini tutmaz. Rahatsızlık hissederseniz durup doğal nefesinize dönün.</p></div><div class="breath-experience" data-reveal><div class="breath-orbits" aria-hidden="true"><div></div><div></div><div></div></div><svg class="breath-progress-svg" viewBox="0 0 340 340" aria-hidden="true"><circle class="breath-track" cx="170" cy="170" r="157"/><circle class="breath-progress-circle" id="breath-progress-circle" cx="170" cy="170" r="157"/></svg><div class="breath-orb" id="breath-orb"><canvas id="breath-gl" aria-hidden="true"></canvas><div class="breath-orb-shine"></div><span class="orb-word" id="orb-word">bir nefes.</span></div><div class="breath-instruction" id="breath-instruction" aria-live="polite">Hazır olduğunuzda.</div><div class="breath-counter"><span id="breath-seconds">60</span> <span>saniye</span><span class="breath-counter-dot">·</span><span id="breath-cycle">0 / 5</span></div></div></div></div>
+    </section>
+
+    <section class="faq section-space" id="sss" aria-labelledby="faq-title">
+      <div class="container faq-grid"><div class="faq-heading" data-reveal><span class="eyebrow">SORULARINIZA YER VAR</span><h2 id="faq-title">Aklınızda<br><em>bir soru mu var?</em></h2><p>Bir başlangıcın öncesinde merak etmek çok doğal. Burada bulamadığınız sorular için bana yazabilirsiniz.</p><a class="text-link" href="mailto:ilayda.akyil@gmail.com">Sorunuzu paylaşın <svg><use href="#arrow-up"/></svg></a><svg class="faq-flower" aria-hidden="true"><use href="#mark"/></svg></div><div class="faq-list" data-reveal><details class="faq-row"><summary><span>İlk görüşmede ne konuşacağız?</span><svg><use href="#plus"/></svg></summary><div><p>Başvuru nedeninizi, ihtiyaçlarınızı ve beklentilerinizi konuşuruz. Her şeyi tek görüşmede anlatmanız gerekmez; ilk görüşme birbirimizi tanımak ve süreci değerlendirmek için bir başlangıçtır.</p></div></details><details class="faq-row"><summary><span>Online görüşme nasıl yapılır?</span><svg><use href="#plus"/></svg></summary><div><p>Görüntülü görüşmeyle bir araya geliriz. Kendinizi rahat hissedebileceğiniz, konuşmalarınızın duyulmayacağı bir ortam ve internet bağlantısı gerekir. Online çalışma biçiminin uygunluğunu görüşme öncesinde birlikte değerlendiririz.</p></div></details><details class="faq-row"><summary><span>Terapi ne kadar devam eder?</span><svg><use href="#plus"/></svg></summary><div><p>Süre herkes için aynı değildir. İhtiyaçlarınız, çalışma hedefleri ve sürecin ilerleyişi doğrultusunda birlikte değerlendirilir.</p></div></details><details class="faq-row"><summary><span>Çocuğum için hangi çalışma uygun?</span><svg><use href="#plus"/></svg></summary><div><p>Çocuğunuzun yaşını, gelişim dönemini ve başvuru nedenini konuşarak başlarız. Uygun çalışma biçimini ilk değerlendirme doğrultusunda birlikte belirleriz.</p></div></details><details class="faq-row"><summary><span>Randevu ve ücret bilgisi nasıl alabilirim?</span><svg><use href="#plus"/></svg></summary><div><p>Aşağıdaki formdan randevu veya bilgi talebi oluşturabilir, doğrudan e-posta da gönderebilirsiniz. Görüşme biçimi, uygun zamanlar ve seans ücretleri için iletişime geçebilirsiniz.</p></div></details></div></div>
+    </section>
+
+    <section class="contact section-space" id="iletisim" aria-labelledby="contact-title">
+      <div class="container contact-grid"><div class="contact-copy" data-reveal><span class="eyebrow">BİRLİKTE BİR BAŞLANGIÇ</span><h2 id="contact-title">Kendinize<br><em>bir alan açın.</em></h2><p>Bir randevu talebi, bir soru ya da nereden başlayacağınızı bilmediğiniz bir an… İletişime geçerek başlayabilirsiniz.</p><a class="contact-email" href="mailto:ilayda.akyil@gmail.com"><svg><use href="#mail"/></svg><span>ilayda.akyil@gmail.com</span><svg><use href="#arrow-up"/></svg></a><div class="contact-locations"><span><svg><use href="#pin"/></svg> Bakırköy</span><span><svg><use href="#pin"/></svg> Kadıköy</span><span><i class="online-dot"></i> Online</span></div><div class="contact-hours"><span>GÖRÜŞME SAATLERİ</span><strong>10.00 — 21.00</strong><small>Haftanın her günü · Randevu ile</small></div><svg class="contact-ornament" aria-hidden="true" viewBox="0 0 280 170"><path d="M25 165V105a65 65 0 0 1 130 0v60M65 165v-60a25 25 0 0 1 50 0v60M147 165v-40a49 49 0 0 1 98 0v40M172 165v-40a24 24 0 0 1 48 0v40" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="213" cy="38" r="20" fill="none" stroke="currentColor"/></svg></div><div class="contact-form-card" data-reveal><div class="psych-backdrop psych-contact" aria-hidden="true"><img src="assets/psychology-connection.svg" alt="" width="800" height="800"></div><div class="form-heading"><span class="micro">İLK ADIM SİZDEN</span><svg aria-hidden="true"><use href="#star"/></svg><h3>Tanışalım.</h3><p>Aşağıdaki bilgilerle bir e-posta taslağı hazırlayın.</p></div><form id="appointment-form"><div class="field-grid"><div class="field"><label for="full-name">Adınız ve soyadınız <span>*</span></label><input id="full-name" name="name" autocomplete="name" placeholder="Adınız Soyadınız" required maxlength="100"></div><div class="field"><label for="phone">Telefon <small>(isteğe bağlı)</small></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="05__ ___ __ __" maxlength="30"></div></div><div class="field"><label for="topic">Nasıl destek olabilirim?</label><div class="select-wrap"><select id="topic" name="topic"><option value="Henüz emin değilim">Henüz emin değilim, birlikte konuşalım</option><option>Bireysel terapi</option><option>Aile terapisi</option><option>Ebeveyn danışmanlığı</option><option>Çocuk ve ergen terapisi</option><option>Oyun terapisi</option><option>Masal terapisi</option><option>Grup terapisi</option><option>Online terapi</option><option>Seans ücretleri hakkında bilgi</option></select><span aria-hidden="true">⌄</span></div></div><fieldset class="mode-field"><legend>Görüşme tercihiniz</legend><div class="mode-options"><label><input type="radio" name="mode" value="Yüz yüze" checked><span><i></i> Yüz yüze</span></label><label><input type="radio" name="mode" value="Online"><span><i></i> Online</span></label><label><input type="radio" name="mode" value="Birlikte belirleyelim"><span><i></i> Birlikte belirleyelim</span></label></div></fieldset><div class="field"><label for="message">Notunuz <small>(isteğe bağlı)</small></label><textarea id="message" name="message" rows="3" maxlength="1500" placeholder="Tercih ettiğiniz gün, saat veya sormak istediğiniz bir soru…"></textarea></div><button type="submit" class="button form-submit">Randevu talebi oluştur <svg><use href="#arrow-up"/></svg></button><p class="form-note"><svg><use href="#mail"/></svg> Form bir e-posta taslağı hazırlar. Gönderimi e-posta uygulamanızdan tamamlayabilirsiniz.</p></form></div></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container footer-top"><a class="brand footer-brand" href="#top"><svg class="brand-mark"><use href="#mark"/></svg><span>İlayda Akyıl Gürkan<small>UZMAN KLİNİK PSİKOLOG</small></span></a><p>Kendinize ayırdığınız<br><em>zaman kıymetli.</em></p><a href="#top" class="back-top" aria-label="Sayfanın başına dön"><svg><use href="#arrow-up"/></svg></a></div><div class="container footer-bottom"><span>© <span id="year">2026</span> İlayda Akyıl Gürkan</span><nav aria-label="Alt menü"><a href="#hizmetler">Çalışma alanları</a><a href="#sss">Sorularınız</a><a href="#iletisim">İletişim</a></nav><span>BAKIRKÖY · KADIKÖY · ONLINE</span></div></footer>
+
+  <div class="floating-cta" id="floating-cta"><a class="floating-secondary" href="#hizmetler">Çalışma alanları</a><a class="floating-primary" href="#iletisim">Bir başlangıç yapın <svg><use href="#arrow-up"/></svg></a></div>
+  <dialog class="request-dialog" id="request-dialog" aria-labelledby="request-dialog-title"><button class="dialog-close icon-button" id="request-close" aria-label="Taslağı kapat">×</button><svg class="dialog-mark" aria-hidden="true"><use href="#mark"/></svg><span class="eyebrow">BİR BAŞLANGIÇ</span><h2 id="request-dialog-title">Taslağınız <em>hazır.</em></h2><p>E-posta uygulamanızda açıp göndererek randevu talebinizi iletebilirsiniz.</p><div class="draft-recipient">Alıcı <strong>ilayda.akyil@gmail.com</strong></div><pre id="draft-preview"></pre><a class="button" id="draft-send" href="mailto:ilayda.akyil@gmail.com">E-postayla ilet <svg><use href="#arrow-up"/></svg></a><button class="text-link copy-draft" id="copy-draft" type="button">Adresi ve metni kopyala <svg><use href="#check"/></svg></button><p class="draft-status" id="draft-status" role="status"></p><small class="draft-note">Talep oluşturmak randevunuzun kesinleştiği anlamına gelmez. Görüşme zamanı iletişim kurulduktan sonra belirlenir.</small></dialog>
+  <div class="toast" id="toast" role="status"></div>
+  <noscript><style>.splash{display:none}.service-filters{display:none}.breath-controls{display:none}#appointment-form{display:none}</style><div class="noscript-note">Nefes molası ve form taslağı için JavaScript'i açabilir veya <a href="mailto:ilayda.akyil@gmail.com">e-posta gönderebilirsiniz.</a></div></noscript>
+</body>
+</html>

@@ -1,0 +1,254 @@
+'use strict';
+(() => {
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+  const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+  const splash = $('#splash');
+  let introDone = false;
+  function finishIntro() {
+    if (introDone) return;
+    introDone = true;
+    document.documentElement.classList.add('intro-ready');
+    splash?.classList.add('is-leaving');
+    try { sessionStorage.setItem('ilayda-intro', 'seen'); } catch {}
+    window.setTimeout(() => splash?.remove(), reduced ? 30 : 1250);
+  }
+  let seenIntro = false;
+  try { seenIntro = sessionStorage.getItem('ilayda-intro') === 'seen'; } catch {}
+  window.setTimeout(finishIntro, reduced || seenIntro ? 30 : 1500);
+  $('#splash-skip')?.addEventListener('click', finishIntro);
+  document.addEventListener('keydown', event => { if (event.key === 'Tab' || event.key === 'Escape') finishIntro(); });
+
+  function initMenu() {
+    const menu = $('#mobile-menu'), toggle = $('#menu-toggle');
+    function closeMenu() {
+      menu.close();
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
+    }
+    toggle.addEventListener('click', () => {
+      menu.showModal();
+      toggle.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('menu-open');
+    });
+    $('#menu-close').addEventListener('click', closeMenu);
+    menu.addEventListener('close', () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('menu-open');
+    });
+    menu.addEventListener('click', event => {
+      if (event.target === menu) {
+        const r = menu.getBoundingClientRect();
+        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) closeMenu();
+      }
+    });
+    $$('#mobile-menu a').forEach(link => link.addEventListener('click', closeMenu));
+    window.addEventListener('resize', () => { if (window.innerWidth > 980 && menu.open) closeMenu(); }, { passive: true });
+  }
+
+  function initScroll() {
+    const header = $('#header'), progress = $('#reading-progress'), floating = $('#floating-cta');
+    let scheduled = false;
+    function update() {
+      scheduled = false;
+      const y = window.scrollY, height = document.documentElement.scrollHeight - window.innerHeight;
+      header.classList.toggle('is-scrolled', y > 16);
+      progress.style.transform = `scaleX(${height > 0 ? Math.min(1, y / height) : 0})`;
+      const contactRect = $('#iletisim').getBoundingClientRect();
+      floating.classList.toggle('is-visible', y > 650 && contactRect.top > window.innerHeight * .55);
+    }
+    window.addEventListener('scroll', () => { if (!scheduled) { scheduled = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+    if (!window.IntersectionObserver) return;
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          if (entry.target.id === 'process-steps') entry.target.classList.add('is-seen');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .08 });
+    $$('[data-reveal]').forEach((element, index) => {
+      if (!reduced && element.getBoundingClientRect().top > window.innerHeight) element.classList.add('will-reveal');
+      element.style.transitionDelay = `${index % 2 * 75}ms`;
+      observer.observe(element);
+    });
+    observer.observe($('#process-steps'));
+    const navLinks = $$('.desktop-nav a');
+    const navObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) navLinks.forEach(link => link.classList.toggle('is-current', link.getAttribute('href') === `#${entry.target.id}`));
+      });
+    }, { rootMargin: '-15% 0px -65% 0px', threshold: 0 });
+    ['hakkimda', 'hizmetler', 'surec', 'sss'].forEach(id => navObserver.observe(document.getElementById(id)));
+    if (!reduced && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
+      const visual = $('#hero-visual');
+      visual.addEventListener('pointermove', event => {
+        const rect = visual.getBoundingClientRect();
+        visual.style.setProperty('--px', `${(event.clientX - rect.left - rect.width / 2) / rect.width * 5}px`);
+        visual.style.setProperty('--py', `${(event.clientY - rect.top - rect.height / 2) / rect.height * 5}px`);
+      });
+      visual.addEventListener('pointerleave', () => { visual.style.setProperty('--px', '0px'); visual.style.setProperty('--py', '0px'); });
+    }
+  }
+
+  function initServices() {
+    const rows = $$('.service-row');
+    const presentation = {
+      individual: ['KENDİNİZLE BİR BULUŞMA', 'Duygularınıza ve düşüncelerinize, sizin hikâyenizden bakmak.'],
+      family: ['BİRBİRİNİZE YER AÇIN', 'Aile içinde her sesin duyulabildiği bir çalışma alanı.'],
+      parent: ['EBEVEYNLİK YOLCULUĞUNUZDA', 'Çocuğunuzu anlamak ve sorularınıza birlikte bakmak.'],
+      child: ['BÜYÜRKEN, KENDİ HIZINDA', 'Çocukların ve gençlerin dünyasına, onların ihtiyaçlarından bakmak.'],
+      play: ['OYUNUN DİLİNDE BULUŞALIM', 'Çocukların duygularını kendi ifade yollarıyla paylaşabilmesi için.'],
+      story: ['HER MASAL BİR KAPI', 'Hikâyelerin içinden duygulara alan açan bir buluşma.'],
+      group: ['BİRLİKTE PAYLAŞMAK', 'Deneyimlere ve ilişkilere bir grup içinde yer açmak.'],
+      online: ['MESAFELERİN ÖTESİNDE', 'Bulunduğunuz yerden bir araya gelebileceğimiz bir görüşme alanı.']
+    };
+    function selectRow(row) {
+      const [category, text] = presentation[row.dataset.service];
+      const title = $('h3', row).textContent;
+      rows.forEach(other => { if (other !== row) other.open = false; });
+      $('#spotlight-number').textContent = `${$('.service-no', row).textContent} / 08`;
+      $('#spotlight-category').textContent = category;
+      $('#spotlight-title').textContent = title;
+      $('#spotlight-text').textContent = text;
+      const link = $('#spotlight-link');
+      link.dataset.topic = $('[data-topic]', row).dataset.topic;
+      link.setAttribute('aria-label', `${title} için randevu talebi`);
+    }
+    rows.forEach(row => row.addEventListener('toggle', () => { if (row.open) selectRow(row); }));
+    $$('#service-filters button').forEach(button => button.addEventListener('click', () => {
+      $$('#service-filters button').forEach(other => {
+        const active = other === button;
+        other.classList.toggle('is-active', active);
+        other.setAttribute('aria-pressed', String(active));
+      });
+      const filter = button.dataset.filter;
+      rows.forEach(row => { row.hidden = filter !== 'all' && !row.dataset.category.split(' ').includes(filter); });
+      const visible = rows.filter(row => !row.hidden);
+      if (!visible.some(row => row.open)) { visible[0].open = true; selectRow(visible[0]); }
+    }));
+    $$('[data-topic]').forEach(link => link.addEventListener('click', () => {
+      $('#topic').value = link.dataset.topic;
+      if (link.dataset.topic === 'Online terapi') $('input[name="mode"][value="Online"]').checked = true;
+    }));
+  }
+
+  function initBreathing() {
+    const start = $('#breath-start'), reset = $('#breath-reset'), instruction = $('#breath-instruction');
+    const orb = $('#breath-orb'), word = $('#orb-word'), seconds = $('#breath-seconds'), cycle = $('#breath-cycle');
+    const circle = $('#breath-progress-circle'), label = $('#breath-button-text'), icon = $('#breath-icon use');
+    const duration = 60000, circumference = 2 * Math.PI * 157;
+    let running = false, elapsed = 0, startedAt = 0, frame = 0, lastPhase = '';
+    function setButton(text, symbol) { label.textContent = text; icon.setAttribute('href', symbol); }
+    function paint(time) {
+      const done = time >= duration;
+      const local = (time / 1000) % 12;
+      const phase = local < 4 ? 'inhale' : local < 6 ? 'hold' : 'exhale';
+      const phaseText = { inhale: '4 saniye boyunca nefes alın.', hold: '2 saniye tutun.', exhale: '6 saniyede yavaşça nefes verin.' };
+      const phaseWord = { inhale: 'Nefes alın', hold: 'Tutun', exhale: 'Nefes verin' };
+      orb.dataset.state = done ? 'complete' : 'running';
+      orb.dataset.elapsed = String(Math.min(duration, time));
+      $('#mola').dataset.breathState = orb.dataset.state;
+      if (done) {
+        instruction.textContent = 'Bir dakikalık molanız tamamlandı.';
+        word.textContent = 'Tamamlandı';
+        lastPhase = 'done';
+      } else if (lastPhase !== phase) {
+        instruction.textContent = phaseText[phase]; word.textContent = phaseWord[phase]; lastPhase = phase;
+      }
+      const eased = p => (1 - Math.cos(Math.PI * p)) / 2;
+      const scale = local < 4 ? .91 + .23 * eased(local / 4) : local < 6 ? 1.14 : 1.14 - .23 * eased((local - 6) / 6);
+      orb.style.setProperty('--breath-scale', String(done ? 1 : scale));
+      seconds.textContent = String(Math.max(0, Math.ceil((duration - time) / 1000)));
+      cycle.textContent = `${done ? 5 : Math.min(5, Math.floor(time / 12000) + 1)} / 5`;
+      circle.style.strokeDashoffset = String(circumference * (1 - Math.min(1, time / duration)));
+    }
+    function tick(now) {
+      if (!running) return;
+      const time = Math.min(duration, elapsed + now - startedAt);
+      paint(time);
+      if (time >= duration) { running = false; elapsed = duration; setButton('Yeniden başlat', '#play'); start.setAttribute('aria-pressed', 'false'); return; }
+      frame = requestAnimationFrame(tick);
+    }
+    function pause() {
+      if (!running) return;
+      elapsed = Math.min(duration, elapsed + performance.now() - startedAt);
+      running = false; cancelAnimationFrame(frame);
+      paint(elapsed);
+      if (elapsed >= duration) { setButton('Yeniden başlat', '#play'); start.setAttribute('aria-pressed', 'false'); return; }
+      orb.dataset.state = 'paused';
+      $('#mola').dataset.breathState = 'paused';
+      word.textContent = 'Duraklatıldı';
+      setButton('Devam et', '#play'); instruction.textContent = 'Hazır olduğunuzda devam edin.';
+      lastPhase = ''; start.setAttribute('aria-pressed', 'false');
+    }
+    start.setAttribute('aria-pressed', 'false');
+    start.addEventListener('click', () => {
+      if (running) { pause(); return; }
+      if (elapsed >= duration) elapsed = 0;
+      running = true; startedAt = performance.now(); reset.hidden = false;
+      setButton('Duraklat', '#pause'); start.setAttribute('aria-pressed', 'true');
+      paint(elapsed); frame = requestAnimationFrame(tick);
+    });
+    reset.addEventListener('click', () => {
+      running = false; cancelAnimationFrame(frame); elapsed = 0; lastPhase = '';
+      setButton('Molayı başlat', '#play'); start.setAttribute('aria-pressed', 'false'); reset.hidden = true;
+      instruction.textContent = 'Hazır olduğunuzda.'; word.textContent = 'bir nefes.';
+      orb.dataset.state = 'idle'; orb.dataset.elapsed = '0';
+      $('#mola').dataset.breathState = 'idle';
+      seconds.textContent = '60'; cycle.textContent = '0 / 5'; circle.style.strokeDashoffset = String(circumference); orb.style.setProperty('--breath-scale', '1');
+    });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
+    window.addEventListener('pagehide', pause);
+  }
+
+  function initContact() {
+    const form = $('#appointment-form'), dialog = $('#request-dialog');
+    let draft = '';
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const name = $('#full-name').value.trim();
+      if (!name) { $('#full-name').setCustomValidity('Lütfen adınızı ve soyadınızı yazın.'); $('#full-name').reportValidity(); return; }
+      const mode = $('input[name="mode"]:checked').value;
+      const topic = $('#topic').value;
+      const body = `Merhaba İlayda Hanım,\n\nBir görüşme hakkında iletişime geçmek istiyorum.\n\nAd Soyad: ${name}\nTelefon: ${$('#phone').value.trim() || 'Belirtilmedi'}\nÇalışma alanı: ${topic}\nGörüşme tercihi: ${mode}\n\n${$('#message').value.trim() || 'Uygun görüşme zamanları hakkında bilgi alabilir miyim?'}\n\nTeşekkür ederim.`;
+      const subject = `Görüşme talebi · ${name.replace(/[\r\n]/g, ' ')} · ${topic}`;
+      $('#draft-preview').textContent = body;
+      $('#draft-send').href = `mailto:ilayda.akyil@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      draft = `Alıcı: ilayda.akyil@gmail.com\nKonu: ${subject}\n\n${body}`;
+      $('#draft-status').textContent = '';
+      dialog.showModal();
+    });
+    $('#full-name').addEventListener('input', event => event.target.setCustomValidity(''));
+    $('#request-close').addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', event => {
+      if (event.target === dialog) {
+        const r = dialog.getBoundingClientRect();
+        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close();
+      }
+    });
+    $('#copy-draft').addEventListener('click', async () => {
+      try {
+        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(draft);
+        else {
+          const text = document.createElement('textarea'); text.value = draft; text.style.cssText = 'position:fixed;opacity:0';
+          dialog.append(text); text.select(); const copied = document.execCommand('copy'); text.remove();
+          if (!copied) throw new Error('Clipboard unavailable');
+        }
+        $('#draft-status').textContent = 'Adres ve taslak metni kopyalandı.';
+      } catch {
+        $('#draft-status').textContent = 'Metni seçerek kopyalayabilirsiniz.';
+        const range = document.createRange(); range.selectNodeContents($('#draft-preview'));
+        const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range);
+      }
+    });
+    $('#draft-send').addEventListener('click', () => { $('#draft-status').textContent = 'Gönderimi e-posta uygulamanızda tamamlayın.'; });
+  }
+  [initMenu, initScroll, initServices, initBreathing, initContact].forEach(init => {
+    try { init(); } catch (error) { console.error('Interface initialization:', error); }
+  });
+})();
