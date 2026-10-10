@@ -31,6 +31,7 @@ body{background:radial-gradient(ellipse at 70% 0%,#f3e8da,transparent 34%),var(-
 .intro-ready .hero-description .copy-word{opacity:1;transform:none;filter:blur(0);transition-delay:calc(450ms + var(--copy-index,0)*14ms)}
 .hero-line em,h2 em{background:linear-gradient(110deg,var(--gold) 0%,var(--gold) 38%,#c3a47c 49%,var(--gold) 60%,var(--gold) 100%);background-size:230% 100%;background-clip:text;-webkit-background-clip:text;color:transparent;animation:wordLight 9s ease-in-out infinite}
 .approach h2 em,.breath-copy h2 em{background:linear-gradient(110deg,var(--champagne) 0%,var(--champagne) 38%,#fff2d9 49%,var(--champagne) 60%);background-size:230% 100%;background-clip:text;-webkit-background-clip:text;color:transparent}
+#faq-title em,#contact-title em{background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;color:var(--champagne)!important;font-style:italic!important}
 .text-link{position:relative}.text-link::after{content:'';position:absolute;left:0;bottom:-4px;right:30px;height:1px;background:currentColor;opacity:.35;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}.text-link:hover::after{transform:scaleX(1)}
 .service-row h3{transition:color .35s,text-shadow .5s,translate .5s var(--ease)}.service-row:hover h3{translate:4px 0;text-shadow:0 8px 22px #b888561c}
 @keyframes wordLight{0%,15%{background-position:100% 50%}50%,100%{background-position:-120% 50%}}
