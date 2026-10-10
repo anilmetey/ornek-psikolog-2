@@ -140,7 +140,7 @@ if (typeof module !== 'undefined' && module.exports) {
     const titleObserver = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add('title-in'); titleObserver.unobserve(entry.target); }
     }), { threshold: .25 });
-    $$('h2').forEach(title => { if (title.classList.contains('scroll-quote')) splitHeading(title, true); else { splitHeading(title); titleObserver.observe(title); } });
+    $$('h2').forEach(title => { if (title.classList.contains('scroll-quote')) splitHeading(title, true); else if (title.id !== 'contact-title') { splitHeading(title); titleObserver.observe(title); } });
     const copyObserver = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add('copy-in'); copyObserver.unobserve(entry.target); }
     }), { threshold: .15 });
