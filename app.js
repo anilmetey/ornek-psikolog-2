@@ -254,7 +254,18 @@
     });
     $('#draft-send').addEventListener('click', () => { $('#draft-status').textContent = 'Gönderimi e-posta uygulamanızda tamamlayın.'; });
   }
-  [initMenu, initScroll, initServices, initBreathing, initContact].forEach(init => {
+
+  function initTraining() {
+    const training = $('.training');
+    if (!training) return;
+    const summary = $('summary', training);
+    if (!summary) return;
+    summary.addEventListener('click', e => {
+      e.stopPropagation();
+    });
+  }
+
+  [initMenu, initScroll, initServices, initTraining, initBreathing, initContact].forEach(init => {
     try { init(); } catch (error) { console.error('Interface initialization:', error); }
   });
 })();

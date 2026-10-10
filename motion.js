@@ -17,15 +17,15 @@ function createIlaydaSculpture(T, mode) {
   });
   const gold = new T.MeshStandardMaterial({ color: '#d8bb90', metalness: .85, roughness: .23 });
   const pearl = new T.MeshPhysicalMaterial({ color: '#e5d0ad', metalness: .12, roughness: .16, clearcoat: 1, transmission: .2, thickness: .5 });
-  const main = new T.Mesh(mode === 'breath' ? new T.SphereGeometry(1.02, 56, 40) : new T.TorusKnotGeometry(1.02, .255, 96, 16, 2, 3), glass);
+  const main = new T.Mesh(mode === 'breath' ? new T.SphereGeometry(1.02, 36, 26) : new T.TorusKnotGeometry(1.02, .255, 64, 16, 2, 3), glass);
   main.name = 'glass-core';
   main.rotation.set(mode === 'breath' ? 0 : .6, .3, -.3);
   group.add(main);
-  const ring = new T.Mesh(new T.TorusGeometry(mode === 'breath' ? 1.31 : 1.91, mode === 'breath' ? .012 : .023, 10, 180), gold);
+  const ring = new T.Mesh(new T.TorusGeometry(mode === 'breath' ? 1.31 : 1.91, mode === 'breath' ? .012 : .023, 8, 64), gold);
   ring.rotation.set(1.14, -.35, .4); ring.name = 'gold-orbit'; group.add(ring);
   if (mode !== 'breath') {
     for (let i = 0; i < 3; i++) {
-      const sphere = new T.Mesh(new T.SphereGeometry(.09 + i * .035, 24, 16), i === 1 ? gold : pearl);
+      const sphere = new T.Mesh(new T.SphereGeometry(.09 + i * .035, 16, 12), i === 1 ? gold : pearl);
       const a = i * 2.1 + .4;
       sphere.position.set(Math.cos(a) * 1.85, Math.sin(a) * 1.45, i * .27 - .3);
       sphere.name = 'pearl-' + i; group.add(sphere);
@@ -60,40 +60,47 @@ if (typeof module !== 'undefined' && module.exports) {
   const cards = $$('.process-step');
   const tilts = $$('.service-row, .about-photo, .contact-form-card, .service-spotlight');
 
-  function makeEnvironment(T, renderer) {
-    const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 512;
+  let sharedEnvironment = null;
+  function getEnvironment(T, renderer) {
+    if (sharedEnvironment) return sharedEnvironment;
+    const canvas = document.createElement('canvas'); canvas.width = 512; canvas.height = 256;
     const ctx = canvas.getContext('2d');
-    const g = ctx.createLinearGradient(0, 0, 0, 512);
+    const g = ctx.createLinearGradient(0, 0, 0, 256);
     g.addColorStop(0, '#f5ebe0'); g.addColorStop(.38, '#faf7ed'); g.addColorStop(.62, '#dcc3a8'); g.addColorStop(1, '#4a3528');
-    ctx.fillStyle = g; ctx.fillRect(0, 0, 1024, 512);
-    ctx.fillStyle = '#fffefa'; ctx.fillRect(95, 42, 90, 240); ctx.fillRect(390, 75, 150, 110); ctx.fillRect(760, 0, 160, 200);
-    const gold = ctx.createLinearGradient(0, 0, 1024, 0);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 512, 256);
+    ctx.fillStyle = '#fffefa'; ctx.fillRect(47, 21, 45, 120); ctx.fillRect(195, 37, 75, 55); ctx.fillRect(380, 0, 80, 100);
+    const gold = ctx.createLinearGradient(0, 0, 512, 0);
     gold.addColorStop(0, '#8a6a50'); gold.addColorStop(.3, '#ddc6a0'); gold.addColorStop(.56, '#fff9ed'); gold.addColorStop(.8, '#b8977a'); gold.addColorStop(1, '#e6cda3');
-    ctx.fillStyle = gold; ctx.fillRect(0, 270, 1024, 40);
+    ctx.fillStyle = gold; ctx.fillRect(0, 135, 512, 20);
     const texture = new T.CanvasTexture(canvas); texture.mapping = T.EquirectangularReflectionMapping; texture.colorSpace = T.SRGBColorSpace;
-    const generator = new T.PMREMGenerator(renderer); const environment = generator.fromEquirectangular(texture);
-    texture.dispose(); generator.dispose(); return environment;
+    const generator = new T.PMREMGenerator(renderer);
+    sharedEnvironment = generator.fromEquirectangular(texture);
+    texture.dispose(); generator.dispose();
+    return sharedEnvironment;
   }
 
   function createScene(id, mode) {
     if (!window.THREE) return;
-    const T = window.THREE, canvas = document.getElementById(id), root = canvas.parentElement;
+    const T = window.THREE, canvas = document.getElementById(id);
+    if (!canvas) return;
+    const root = canvas.parentElement;
     let renderer;
     try {
       renderer = new T.WebGLRenderer({ canvas, antialias: window.innerWidth > 740, alpha: true, powerPreference: 'low-power' });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 740 ? 1 : 1.4));
       renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.25;
       const scene = new T.Scene();
-      scene.background = new T.Color(mode === 'service' || mode === 'breath' ? '#2e231e' : '#f6efe6');
       const camera = new T.PerspectiveCamera(mode === 'breath' ? 37 : 35, 1, .1, 30);
       camera.position.set(0, 0, mode === 'breath' ? 4.15 : mode === 'service' ? 6.4 : 7.5);
-      const environment = makeEnvironment(T, renderer); scene.environment = environment.texture;
+      const environment = getEnvironment(T, renderer); scene.environment = environment.texture;
       scene.add(new T.HemisphereLight('#fff9e8', '#4a3528', 2.5));
       const key = new T.DirectionalLight('#ffffff', 3.7); key.position.set(-3, 4, 4); scene.add(key);
       const rim = new T.DirectionalLight('#e7c893', 3); rim.position.set(4, -1, -2); scene.add(rim);
-      const green = new T.PointLight('#f0d2c0', 10, 15); green.position.set(-3, -2, 3); scene.add(green);
+      if (mode !== 'breath') {
+        const green = new T.PointLight('#f0d2c0', 8, 12); green.position.set(-3, -2, 3); scene.add(green);
+      }
       const sculpture = createIlaydaSculpture(T, mode); scene.add(sculpture);
-      const entry = { mode, canvas, root, renderer, scene, camera, sculpture, visible: true, selection: 0, environment };
+      const entry = { mode, canvas, root, renderer, scene, camera, sculpture, visible: mode === 'hero', selection: 0, environment };
       function resize() {
         const rect = root.getBoundingClientRect();
         if (!rect.width || !rect.height) return;
@@ -220,17 +227,21 @@ if (typeof module !== 'undefined' && module.exports) {
     const a = approach.getBoundingClientRect(), p = clamp((window.innerHeight * .76 - a.top) / (a.height * .7 + window.innerHeight * .2));
     quoteWords.forEach((word, index) => {
       const strength = clamp((p - index / Math.max(1, quoteWords.length) * .68) / .26);
-      word.style.opacity = String(.18 + strength * .82); word.style.filter = `blur(${(1 - strength) * 1.2}px)`;
+      word.style.opacity = String(.18 + strength * .82);
     });
     cards.forEach((card, index) => {
       const r = card.getBoundingClientRect(), travel = clamp((window.innerHeight * .35 - r.top) / window.innerHeight);
       card.style.setProperty('--stack-scale', String(1 - travel * .045 * (cards.length - index)));
       card.style.setProperty('--stack-tilt', `${travel * -2.4}deg`);
     });
-    const photo = $('.about-photo'), pr = photo.getBoundingClientRect();
-    const parallax = clamp((window.innerHeight * .5 - pr.top) / window.innerHeight, -1, 1);
-    photo.style.setProperty('--photo-parallax', `${-4 + parallax * 2}%`);
-    $('.about-label').style.setProperty('--label-parallax', `${parallax * -17}px`);
+    const photo = $('.about-photo');
+    if (photo) {
+      const pr = photo.getBoundingClientRect();
+      const parallax = clamp((window.innerHeight * .5 - pr.top) / window.innerHeight, -1, 1);
+      photo.style.setProperty('--photo-parallax', `${-4 + parallax * 2}%`);
+      const label = $('.about-label');
+      if (label) label.style.setProperty('--label-parallax', `${parallax * -17}px`);
+    }
   }
   let scrollQueued = false;
   window.addEventListener('scroll', () => {
@@ -241,14 +252,14 @@ if (typeof module !== 'undefined' && module.exports) {
   function animate(now) {
     if (document.hidden) { raf = 0; return; }
     raf = requestAnimationFrame(animate);
-    if (now - lastRender < 30) return;
+    if (now - lastRender < 14) return;
     lastRender = now;
     pointer.x += (pointer.targetX - pointer.x) * .07; pointer.y += (pointer.targetY - pointer.y) * .07;
     smoothScroll += (scrollTarget - smoothScroll) * .07;
-    if (visual) {
+    if (visual && visualHovered) {
       currentPortraitRx += (targetPortraitRx - currentPortraitRx) * .08;
       currentPortraitRy += (targetPortraitRy - currentPortraitRy) * .08;
-      if (Math.abs(currentPortraitRx) > 0.01 || Math.abs(currentPortraitRy) > 0.01 || visualHovered) {
+      if (Math.abs(currentPortraitRx) > 0.01 || Math.abs(currentPortraitRy) > 0.01) {
         visual.style.setProperty('--portrait-rx', currentPortraitRx.toFixed(2) + 'deg');
         visual.style.setProperty('--portrait-ry', currentPortraitRy.toFixed(2) + 'deg');
       }
@@ -259,7 +270,7 @@ if (typeof module !== 'undefined' && module.exports) {
     }
     const t = reduced ? 0 : now / 1000;
     scenes.forEach(entry => {
-      if (!entry.visible) return;
+      if (!entry.visible || entry.canvas.offsetParent === null) return;
       const { sculpture, mode, renderer, scene, camera } = entry;
       const heroTravel = mode === 'hero' ? Math.min(1, smoothScroll / 850) : 0;
       const sceneTime = t;
@@ -272,13 +283,6 @@ if (typeof module !== 'undefined' && module.exports) {
         const glassCore = sculpture.getObjectByName('glass-core');
         const shader = glassCore?.material?.userData?.shader;
         if (shader) shader.uniforms.uMotionTime.value = sceneTime * .75;
-        const orbEl = document.getElementById('breath-orb');
-        if (orbEl && orbEl.dataset.state === 'running') {
-          const sVal = parseFloat(orbEl.style.getPropertyValue('--breath-scale')) || 1;
-          sculpture.scale.setScalar(sVal);
-        } else {
-          sculpture.scale.setScalar(1 + Math.sin(sceneTime * 1.05) * 0.05);
-        }
       }
       camera.position.x = scenePointerX * .13; camera.position.y = -scenePointerY * .1; camera.lookAt(0, 0, 0);
       renderer.render(scene, camera);
