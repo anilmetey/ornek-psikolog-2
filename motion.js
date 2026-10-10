@@ -4,15 +4,20 @@
 function createIlaydaSculpture(T, mode) {
   const group = new T.Group();
   const glass = new T.MeshPhysicalMaterial({
-    color: mode === 'breath' ? '#dac8a8' : mode === 'service' ? '#b5cbb6' : '#91b5a0',
-    metalness: mode === 'service' ? .26 : .12,
-    roughness: .115, transmission: mode === 'service' ? .22 : .48,
-    thickness: 1.2, ior: 1.4, clearcoat: 1, clearcoatRoughness: .04,
-    envMapIntensity: 2.1, attenuationColor: new T.Color('#a6c2aa'), attenuationDistance: 4
+    color: mode === 'breath' ? '#dac8a8' : mode === 'service' ? '#e0c9b0' : '#d8b9a0',
+    metalness: .12,
+    roughness: .16,
+    transmission: 0,
+    opacity: .88,
+    transparent: true,
+    ior: 1.3,
+    clearcoat: .8,
+    clearcoatRoughness: .08,
+    envMapIntensity: 1.8
   });
   const gold = new T.MeshStandardMaterial({ color: '#d8bb90', metalness: .85, roughness: .23 });
   const pearl = new T.MeshPhysicalMaterial({ color: '#e5d0ad', metalness: .12, roughness: .16, clearcoat: 1, transmission: .2, thickness: .5 });
-  const main = new T.Mesh(mode === 'breath' ? new T.SphereGeometry(1.02, 56, 40) : new T.TorusKnotGeometry(1.02, .255, 180, 24, 2, 3), glass);
+  const main = new T.Mesh(mode === 'breath' ? new T.SphereGeometry(1.02, 56, 40) : new T.TorusKnotGeometry(1.02, .255, 96, 16, 2, 3), glass);
   main.name = 'glass-core';
   main.rotation.set(mode === 'breath' ? 0 : .6, .3, -.3);
   group.add(main);
@@ -59,11 +64,11 @@ if (typeof module !== 'undefined' && module.exports) {
     const canvas = document.createElement('canvas'); canvas.width = 1024; canvas.height = 512;
     const ctx = canvas.getContext('2d');
     const g = ctx.createLinearGradient(0, 0, 0, 512);
-    g.addColorStop(0, '#e4efdf'); g.addColorStop(.38, '#faf7ed'); g.addColorStop(.62, '#b7cbb3'); g.addColorStop(1, '#314c3c');
+    g.addColorStop(0, '#f5ebe0'); g.addColorStop(.38, '#faf7ed'); g.addColorStop(.62, '#dcc3a8'); g.addColorStop(1, '#4a3528');
     ctx.fillStyle = g; ctx.fillRect(0, 0, 1024, 512);
     ctx.fillStyle = '#fffefa'; ctx.fillRect(95, 42, 90, 240); ctx.fillRect(390, 75, 150, 110); ctx.fillRect(760, 0, 160, 200);
     const gold = ctx.createLinearGradient(0, 0, 1024, 0);
-    gold.addColorStop(0, '#56785f'); gold.addColorStop(.3, '#ddc6a0'); gold.addColorStop(.56, '#fff9ed'); gold.addColorStop(.8, '#879d7c'); gold.addColorStop(1, '#e6cda3');
+    gold.addColorStop(0, '#8a6a50'); gold.addColorStop(.3, '#ddc6a0'); gold.addColorStop(.56, '#fff9ed'); gold.addColorStop(.8, '#b8977a'); gold.addColorStop(1, '#e6cda3');
     ctx.fillStyle = gold; ctx.fillRect(0, 270, 1024, 40);
     const texture = new T.CanvasTexture(canvas); texture.mapping = T.EquirectangularReflectionMapping; texture.colorSpace = T.SRGBColorSpace;
     const generator = new T.PMREMGenerator(renderer); const environment = generator.fromEquirectangular(texture);
@@ -79,14 +84,14 @@ if (typeof module !== 'undefined' && module.exports) {
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.innerWidth < 740 ? 1 : 1.4));
       renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.25;
       const scene = new T.Scene();
-      scene.background = new T.Color(mode === 'service' || mode === 'breath' ? '#234c3c' : '#e9eee1');
+      scene.background = new T.Color(mode === 'service' || mode === 'breath' ? '#2e231e' : '#f6efe6');
       const camera = new T.PerspectiveCamera(mode === 'breath' ? 37 : 35, 1, .1, 30);
       camera.position.set(0, 0, mode === 'breath' ? 4.15 : mode === 'service' ? 6.4 : 7.5);
       const environment = makeEnvironment(T, renderer); scene.environment = environment.texture;
-      scene.add(new T.HemisphereLight('#fff9e8', '#2d533d', 2.5));
+      scene.add(new T.HemisphereLight('#fff9e8', '#4a3528', 2.5));
       const key = new T.DirectionalLight('#ffffff', 3.7); key.position.set(-3, 4, 4); scene.add(key);
       const rim = new T.DirectionalLight('#e7c893', 3); rim.position.set(4, -1, -2); scene.add(rim);
-      const green = new T.PointLight('#b9d8bf', 10, 15); green.position.set(-3, -2, 3); scene.add(green);
+      const green = new T.PointLight('#f0d2c0', 10, 15); green.position.set(-3, -2, 3); scene.add(green);
       const sculpture = createIlaydaSculpture(T, mode); scene.add(sculpture);
       const entry = { mode, canvas, root, renderer, scene, camera, sculpture, visible: true, selection: 0, environment };
       function resize() {
@@ -184,20 +189,26 @@ if (typeof module !== 'undefined' && module.exports) {
   $$('.service-row').forEach((row, index) => row.addEventListener('toggle', () => {
     if (row.open) { const entry = scenes.find(scene => scene.mode === 'service'); if (entry) entry.selection = index; }
   }));
+  let targetPortraitRx = 0, targetPortraitRy = 0, currentPortraitRx = 0, currentPortraitRy = 0;
+  let visualHovered = false;
+  if (visual) {
+    visual.addEventListener('pointerenter', () => { visualHovered = true; }, { passive: true });
+    visual.addEventListener('pointerleave', () => { visualHovered = false; targetPortraitRx = 0; targetPortraitRy = 0; }, { passive: true });
+  }
   if (fine && !reduced) {
     document.addEventListener('pointermove', event => {
       pointer.pageX = event.clientX; pointer.pageY = event.clientY; pointer.active = true;
       pointer.targetX = (event.clientX / window.innerWidth - .5) * 2;
       pointer.targetY = (event.clientY / window.innerHeight - .5) * 2;
       aura.classList.add('is-active'); aura.classList.toggle('over-link', !!event.target.closest('a,button,summary'));
-      const r = visual.getBoundingClientRect();
-      const localX = clamp((event.clientX - r.left) / r.width, 0, 1) - .5;
-      const localY = clamp((event.clientY - r.top) / r.height, 0, 1) - .5;
-      visual.style.setProperty('--portrait-rx', `${-localY * 10}deg`); visual.style.setProperty('--portrait-ry', `${localX * 16}deg`);
+      if (visualHovered) {
+        targetPortraitRx = -pointer.targetY * 5;
+        targetPortraitRy = pointer.targetX * 8;
+      }
       approach.style.setProperty('--aura-x', `${event.clientX / window.innerWidth * 100}%`);
       approach.style.setProperty('--aura-y', `${event.clientY / window.innerHeight * 100}%`);
     }, { passive: true });
-    document.addEventListener('pointerleave', () => { pointer.active = false; pointer.targetX = pointer.targetY = 0; aura.classList.remove('is-active'); });
+    document.addEventListener('pointerleave', () => { pointer.active = false; pointer.targetX = pointer.targetY = 0; aura.classList.remove('is-active'); targetPortraitRx = 0; targetPortraitRy = 0; });
   }
 
   function updateScroll() {
@@ -234,6 +245,14 @@ if (typeof module !== 'undefined' && module.exports) {
     lastRender = now;
     pointer.x += (pointer.targetX - pointer.x) * .07; pointer.y += (pointer.targetY - pointer.y) * .07;
     smoothScroll += (scrollTarget - smoothScroll) * .07;
+    if (visual) {
+      currentPortraitRx += (targetPortraitRx - currentPortraitRx) * .08;
+      currentPortraitRy += (targetPortraitRy - currentPortraitRy) * .08;
+      if (Math.abs(currentPortraitRx) > 0.01 || Math.abs(currentPortraitRy) > 0.01 || visualHovered) {
+        visual.style.setProperty('--portrait-rx', currentPortraitRx.toFixed(2) + 'deg');
+        visual.style.setProperty('--portrait-ry', currentPortraitRy.toFixed(2) + 'deg');
+      }
+    }
     if (fine && pointer.active && aura) {
       const size = aura.classList.contains('over-link') ? 70 : 42;
       aura.style.transform = `translate3d(${pointer.pageX - size / 2}px,${pointer.pageY - size / 2}px,0)`;
@@ -243,15 +262,23 @@ if (typeof module !== 'undefined' && module.exports) {
       if (!entry.visible) return;
       const { sculpture, mode, renderer, scene, camera } = entry;
       const heroTravel = mode === 'hero' ? Math.min(1, smoothScroll / 850) : 0;
-      const sceneTime = mode === 'breath' ? Number($('#breath-orb').dataset.elapsed || 0) / 1000 : t;
+      const sceneTime = t;
       const scenePointerX = mode === 'breath' ? 0 : pointer.x, scenePointerY = mode === 'breath' ? 0 : pointer.y;
       sculpture.rotation.x = -.1 + scenePointerY * .13 + heroTravel * .65 + Math.sin(sceneTime * .18) * .07;
-      sculpture.rotation.y = sceneTime * .095 + scenePointerX * .38 + heroTravel * 1.8 + entry.selection * .38;
+      sculpture.rotation.y = sceneTime * (mode === 'breath' ? .12 : .095) + scenePointerX * .38 + heroTravel * 1.8 + entry.selection * .38;
       sculpture.rotation.z = -.16 + Math.sin(sceneTime * .16) * .12;
       sculpture.position.y = Math.sin(sceneTime * .6) * .06;
       if (mode === 'breath') {
-        const shader = sculpture.getObjectByName('glass-core').material.userData.shader;
-        if (shader) shader.uniforms.uMotionTime.value = sceneTime * .6;
+        const glassCore = sculpture.getObjectByName('glass-core');
+        const shader = glassCore?.material?.userData?.shader;
+        if (shader) shader.uniforms.uMotionTime.value = sceneTime * .75;
+        const orbEl = document.getElementById('breath-orb');
+        if (orbEl && orbEl.dataset.state === 'running') {
+          const sVal = parseFloat(orbEl.style.getPropertyValue('--breath-scale')) || 1;
+          sculpture.scale.setScalar(sVal);
+        } else {
+          sculpture.scale.setScalar(1 + Math.sin(sceneTime * 1.05) * 0.05);
+        }
       }
       camera.position.x = scenePointerX * .13; camera.position.y = -scenePointerY * .1; camera.lookAt(0, 0, 0);
       renderer.render(scene, camera);

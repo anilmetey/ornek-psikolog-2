@@ -1,19 +1,21 @@
-# psikolog-ornek
+# ornek-psikolog-2
 
-İlayda Akyıl Gürkan için hazırlanmış psikolog web sitesi örneği.
+Uzman Klinik Psikolog İlayda Gürkan — Resmi Web Sitesi.
 
-## Çalıştırma
+Çocuk, ergen ve yetişkin psikoterapisi, Bilişsel Davranışçı Oyun Terapisi, Dikkat Eksikliği & DEHB (MOXO, Attentioner) ve Bilişsel Müdahale (Todi Cognit, Disleksi).
 
-`index.html` dosyasını tarayıcıda açın. Kurulum veya derleme gerekmez. Görseller, fontlar ve Three.js yerel dosyalardan yüklenir.
+## Canlı Önizleme & Web Yayınlama
 
-## Dosyalar
+Bu proje statik HTML, CSS ve JavaScript (Vanilla + Three.js) mimarisiyle hazırlanmıştır:
+- Sıfır build veya npm bağımlılığı gerektirir.
+- GitHub Pages, Vercel, Netlify veya herhangi bir web sunucusunda doğrudan çalışır.
+- Tüm varlık yolları (görseller, fontlar, scriptler) göreli (relative) olarak yapılandırılmıştır.
 
-- `index.html`: sayfa içeriği.
-- `style.css`, `motion.css`: tasarım, responsive düzen ve animasyonlar.
-- `app.js`: menü, hizmet filtreleri, nefes egzersizi ve iletişim formu.
-- `motion.js`: Three.js sahneleri ve etkileşimler.
-- `assets/`: görseller, SVG çizimler, fontlar ve Three.js.
+## Proje Yapısı
 
-Nefes egzersizi 60 saniyede 5 döngü çalışır; her döngü 4 saniye nefes alma, 2 saniye tutma ve 6 saniye nefes verme aşamalarından oluşur. Duraklatma, devam ve sıfırlama desteklenir.
-
-İletişim formu e-posta taslağı oluşturur; sunucuya gönderim veya randevu kaydı yapmaz.
+- `index.html`: Sayfa iskeleti, semantik içerik ve erişilebilir arayüz.
+- `style.css`: Renk paleti (espresso/şampanya/keten), tipografi ve temel responsive düzen.
+- `motion.css`: Akıcı mikro etkileşimler, arka plan derinliği ve duyarlı animasyonlar.
+- `app.js`: Mobil menü, servis filtreleri, 1 dakikalık nefes molası ve randevu taslak formu.
+- `motion.js`: Three.js WebGL 3D heykelleri, akıcı kamera ve organik nefes dalgası.
+- `assets/`: Gerçek ofis fotoğrafları, portre, terapötik SVG çizimler, fontlar ve yerel Three.js kütüphanesi.

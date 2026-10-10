@@ -82,16 +82,10 @@
         if (entry.isIntersecting) navLinks.forEach(link => link.classList.toggle('is-current', link.getAttribute('href') === `#${entry.target.id}`));
       });
     }, { rootMargin: '-15% 0px -65% 0px', threshold: 0 });
-    ['hakkimda', 'hizmetler', 'surec', 'sss'].forEach(id => navObserver.observe(document.getElementById(id)));
-    if (!reduced && window.matchMedia('(hover:hover) and (pointer:fine)').matches) {
-      const visual = $('#hero-visual');
-      visual.addEventListener('pointermove', event => {
-        const rect = visual.getBoundingClientRect();
-        visual.style.setProperty('--px', `${(event.clientX - rect.left - rect.width / 2) / rect.width * 5}px`);
-        visual.style.setProperty('--py', `${(event.clientY - rect.top - rect.height / 2) / rect.height * 5}px`);
-      });
-      visual.addEventListener('pointerleave', () => { visual.style.setProperty('--px', '0px'); visual.style.setProperty('--py', '0px'); });
-    }
+    ['hakkimda', 'hizmetler', 'ofis', 'surec', 'iletisim', 'sss'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) navObserver.observe(el);
+    });
   }
 
   function initServices() {
@@ -170,7 +164,17 @@
       if (!running) return;
       const time = Math.min(duration, elapsed + now - startedAt);
       paint(time);
-      if (time >= duration) { running = false; elapsed = duration; setButton('Yeniden başlat', '#play'); start.setAttribute('aria-pressed', 'false'); return; }
+      if (time >= duration) {
+        running = false;
+        elapsed = duration;
+        setButton('Yeniden başlat', '#play');
+        start.setAttribute('aria-pressed', 'false');
+        instruction.textContent = 'Bir dakikalık molanız tamamlandı. Nefesinize huzurla devam edebilirsiniz.';
+        word.textContent = 'Huzurla';
+        orb.dataset.state = 'complete';
+        $('#mola').dataset.breathState = 'complete';
+        return;
+      }
       frame = requestAnimationFrame(tick);
     }
     function pause() {
@@ -185,6 +189,8 @@
       setButton('Devam et', '#play'); instruction.textContent = 'Hazır olduğunuzda devam edin.';
       lastPhase = ''; start.setAttribute('aria-pressed', 'false');
     }
+    orb.dataset.state = 'idle';
+    $('#mola').dataset.breathState = 'idle';
     start.setAttribute('aria-pressed', 'false');
     start.addEventListener('click', () => {
       if (running) { pause(); return; }
