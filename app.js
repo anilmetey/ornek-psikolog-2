@@ -213,46 +213,151 @@
 
   function initContact() {
     const form = $('#appointment-form'), dialog = $('#request-dialog');
-    let draft = '';
+    if (!form || !dialog) return;
+    let draft = '', waText = '';
+
+    function getFormData() {
+      const name = ($('#full-name')?.value || '').trim();
+      const phone = ($('#phone')?.value || '').trim();
+      const mode = $('input[name="mode"]:checked')?.value || 'Kartal Ofisi (Yüz yüze)';
+      const topic = $('#topic')?.value || 'Genel Görüşme';
+      const note = ($('#message')?.value || '').trim();
+      return { name, phone, mode, topic, note };
+    }
+
+    function buildMessages(data) {
+      const { name, phone, mode, topic, note } = data;
+      const displayName = name || (phone ? `Danışan (${phone})` : 'Danışan');
+      const displayPhone = phone || 'Belirtilmedi';
+
+      const emailBody = `Merhaba İlayda Hanım,\n\nBir görüşme hakkında iletişime geçmek istiyorum.\n\nAd Soyad: ${displayName}\nTelefon: ${displayPhone}\nÇalışma alanı: ${topic}\nGörüşme tercihi: ${mode}\n\n${note || 'Uygun görüşme zamanları hakkında bilgi alabilir miyim?'}\n\nTeşekkür ederim.`;
+      const emailSubject = `Görüşme talebi · ${displayName.replace(/[\r\n]/g, ' ')} · ${topic}`;
+
+      const whatsappMessage = `Merhaba İlayda Hanım,\nRandevu ve ön bilgi almak istiyorum.\n\n• Ad Soyad: ${displayName}\n• Telefon: ${displayPhone}\n• Destek Alanı: ${topic}\n• Tercih: ${mode}${note ? `\n• Not: ${note}` : ''}\n\nTeşekkür ederim.`;
+
+      return { emailBody, emailSubject, whatsappMessage };
+    }
+
+    function showFormError(message) {
+      const errorEl = $('#full-name-error');
+      const nameInput = $('#full-name');
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.style.display = 'block';
+      }
+      if (nameInput) {
+        nameInput.style.borderColor = '#c24b38';
+        nameInput.focus();
+        nameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    function clearFormError() {
+      const errorEl = $('#full-name-error');
+      const nameInput = $('#full-name');
+      if (errorEl) errorEl.style.display = 'none';
+      if (nameInput) nameInput.style.borderColor = '';
+    }
+
+    $('#full-name')?.addEventListener('input', clearFormError);
+    $('#phone')?.addEventListener('input', clearFormError);
+
+    // Direct WhatsApp Button on Form
+    $('#form-wa-direct-btn')?.addEventListener('click', () => {
+      const data = getFormData();
+      const { whatsappMessage } = buildMessages(data);
+      const waUrl = `https://wa.me/905425941943?text=${encodeURIComponent(whatsappMessage)}`;
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+    });
+
+    // Form Submit (Opens modal with WhatsApp, Email & Copy options)
     form.addEventListener('submit', event => {
       event.preventDefault();
-      if (!form.reportValidity()) return;
-      const name = $('#full-name').value.trim();
-      if (!name) { $('#full-name').setCustomValidity('Lütfen adınızı ve soyadınızı yazın.'); $('#full-name').reportValidity(); return; }
-      const mode = $('input[name="mode"]:checked').value;
-      const topic = $('#topic').value;
-      const body = `Merhaba İlayda Hanım,\n\nBir görüşme hakkında iletişime geçmek istiyorum.\n\nAd Soyad: ${name}\nTelefon: ${$('#phone').value.trim() || 'Belirtilmedi'}\nÇalışma alanı: ${topic}\nGörüşme tercihi: ${mode}\n\n${$('#message').value.trim() || 'Uygun görüşme zamanları hakkında bilgi alabilir miyim?'}\n\nTeşekkür ederim.`;
-      const subject = `Görüşme talebi · ${name.replace(/[\r\n]/g, ' ')} · ${topic}`;
-      $('#draft-preview').textContent = body;
-      $('#draft-send').href = `mailto:ilayda.akyil@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      draft = `Alıcı: ilayda.akyil@gmail.com\nKonu: ${subject}\n\n${body}`;
+      const data = getFormData();
+      if (!data.name && !data.phone) {
+        showFormError('Lütfen adınızı veya telefon numaranızı girin.');
+        return;
+      }
+      clearFormError();
+
+      const { emailBody, emailSubject, whatsappMessage } = buildMessages(data);
+      draft = `Alıcı: ilayda.akyil@gmail.com\nKonu: ${emailSubject}\n\n${emailBody}`;
+      waText = whatsappMessage;
+
+      $('#draft-preview').textContent = whatsappMessage;
+
+      const waLink = $('#draft-whatsapp');
+      if (waLink) {
+        waLink.href = `https://wa.me/905425941943?text=${encodeURIComponent(whatsappMessage)}`;
+      }
+
+      const mailLink = $('#draft-send');
+      if (mailLink) {
+        mailLink.href = `mailto:ilayda.akyil@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      }
+
       $('#draft-status').textContent = '';
-      dialog.showModal();
+
+      if (typeof dialog.showModal === 'function') {
+        try { dialog.showModal(); } catch { dialog.setAttribute('open', ''); }
+      } else {
+        dialog.setAttribute('open', '');
+      }
     });
-    $('#full-name').addEventListener('input', event => event.target.setCustomValidity(''));
-    $('#request-close').addEventListener('click', () => dialog.close());
+
+    $('#request-close')?.addEventListener('click', () => {
+      if (typeof dialog.close === 'function') {
+        try { dialog.close(); } catch { dialog.removeAttribute('open'); }
+      } else {
+        dialog.removeAttribute('open');
+      }
+    });
+
     dialog.addEventListener('click', event => {
       if (event.target === dialog) {
         const r = dialog.getBoundingClientRect();
-        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close();
+        if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) {
+          if (typeof dialog.close === 'function') {
+            try { dialog.close(); } catch { dialog.removeAttribute('open'); }
+          } else {
+            dialog.removeAttribute('open');
+          }
+        }
       }
     });
-    $('#copy-draft').addEventListener('click', async () => {
+
+    $('#copy-draft')?.addEventListener('click', async () => {
       try {
-        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(draft);
+        const textToCopy = waText || draft;
+        if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(textToCopy);
         else {
-          const text = document.createElement('textarea'); text.value = draft; text.style.cssText = 'position:fixed;opacity:0';
-          dialog.append(text); text.select(); const copied = document.execCommand('copy'); text.remove();
+          const text = document.createElement('textarea');
+          text.value = textToCopy;
+          text.style.cssText = 'position:fixed;opacity:0';
+          dialog.append(text);
+          text.select();
+          const copied = document.execCommand('copy');
+          text.remove();
           if (!copied) throw new Error('Clipboard unavailable');
         }
-        $('#draft-status').textContent = 'Adres ve taslak metni kopyalandı.';
+        $('#draft-status').textContent = 'Taslak metni kopyalandı.';
       } catch {
         $('#draft-status').textContent = 'Metni seçerek kopyalayabilirsiniz.';
-        const range = document.createRange(); range.selectNodeContents($('#draft-preview'));
-        const selection = window.getSelection(); selection.removeAllRanges(); selection.addRange(range);
+        const range = document.createRange();
+        range.selectNodeContents($('#draft-preview'));
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
       }
     });
-    $('#draft-send').addEventListener('click', () => { $('#draft-status').textContent = 'Gönderimi e-posta uygulamanızda tamamlayın.'; });
+
+    $('#draft-send')?.addEventListener('click', () => {
+      $('#draft-status').textContent = 'E-posta uygulamanız açılıyor...';
+    });
+
+    $('#draft-whatsapp')?.addEventListener('click', () => {
+      $('#draft-status').textContent = 'WhatsApp açılıyor...';
+    });
   }
 
   function initTraining() {
