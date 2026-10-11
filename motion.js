@@ -80,7 +80,7 @@ if (typeof module !== 'undefined' && module.exports) {
   }
 
   function createScene(id, mode) {
-    if (!window.THREE) return;
+    if (!window.THREE || !fine || window.innerWidth <= 980) return;
     const T = window.THREE, canvas = document.getElementById(id);
     if (!canvas) return;
     const root = canvas.parentElement;
@@ -143,7 +143,7 @@ if (typeof module !== 'undefined' && module.exports) {
       node.replaceWith(fragment);
     });
   }
-  if (!reduced && window.IntersectionObserver) {
+  if (!reduced && window.IntersectionObserver && fine && window.innerWidth > 980) {
     const titleObserver = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add('title-in'); titleObserver.unobserve(entry.target); }
     }), { threshold: .25 });
@@ -292,7 +292,8 @@ if (typeof module !== 'undefined' && module.exports) {
   function start() { if (!raf && !document.hidden) raf = requestAnimationFrame(animate); }
   document.addEventListener('visibilitychange', () => { if (document.hidden) { cancelAnimationFrame(raf); raf = 0; } else start(); });
   window.addEventListener('pagehide', () => { cancelAnimationFrame(raf); raf = 0; });
-  window.addEventListener('pageshow', start);
-  createScene('hero-gl', 'hero'); createScene('service-gl', 'service'); createScene('breath-gl', 'breath'); start();
+  if (fine && window.innerWidth > 980) {
+    createScene('hero-gl', 'hero'); createScene('service-gl', 'service'); createScene('breath-gl', 'breath'); start();
+  }
 })();
 }
