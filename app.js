@@ -75,14 +75,15 @@
       element.style.transitionDelay = `${index % 2 * 75}ms`;
       observer.observe(element);
     });
-    observer.observe($('#process-steps'));
+    const pSteps = $('#process-steps');
+    if (pSteps) observer.observe(pSteps);
     const navLinks = $$('.desktop-nav a');
     const navObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) navLinks.forEach(link => link.classList.toggle('is-current', link.getAttribute('href') === `#${entry.target.id}`));
       });
     }, { rootMargin: '-15% 0px -65% 0px', threshold: 0 });
-    ['hakkimda', 'hizmetler', 'ofis', 'surec', 'iletisim', 'sss'].forEach(id => {
+    ['hakkimda', 'hizmetler', 'ofis', 'sss', 'iletisim'].forEach(id => {
       const el = document.getElementById(id);
       if (el) navObserver.observe(el);
     });
@@ -91,26 +92,26 @@
   function initServices() {
     const rows = $$('.service-row');
     const presentation = {
-      individual: ['KENDİNİZLE BİR BULUŞMA', 'Duygularınıza ve düşüncelerinize, sizin hikâyenizden bakmak.'],
-      family: ['BİRBİRİNİZE YER AÇIN', 'Aile içinde her sesin duyulabildiği bir çalışma alanı.'],
-      parent: ['EBEVEYNLİK YOLCULUĞUNUZDA', 'Çocuğunuzu anlamak ve sorularınıza birlikte bakmak.'],
       child: ['BÜYÜRKEN, KENDİ HIZINDA', 'Çocukların ve gençlerin dünyasına, onların ihtiyaçlarından bakmak.'],
       play: ['OYUNUN DİLİNDE BULUŞALIM', 'Çocukların duygularını kendi ifade yollarıyla paylaşabilmesi için.'],
-      story: ['HER MASAL BİR KAPI', 'Hikâyelerin içinden duygulara alan açan bir buluşma.'],
-      group: ['BİRLİKTE PAYLAŞMAK', 'Deneyimlere ve ilişkilere bir grup içinde yer açmak.'],
+      parent: ['EBEVEYNLİK YOLCULUĞUNUZDA', 'Çocuğunuzu anlamak ve sorularınıza birlikte bakmak.'],
+      individual: ['KENDİNİZLE BİR BULUŞMA', 'Duygularınıza ve düşüncelerinize, sizin hikâyenizden bakmak.'],
+      family: ['BİRBİRİNİZE YER AÇIN', 'Aile içinde her sesin duyulabildiği bir çalışma alanı.'],
       online: ['MESAFELERİN ÖTESİNDE', 'Bulunduğunuz yerden bir araya gelebileceğimiz bir görüşme alanı.']
     };
     function selectRow(row) {
-      const [category, text] = presentation[row.dataset.service];
+      const [category, text] = presentation[row.dataset.service] || ['GÖRÜŞME ALANI', 'Sizin için güvenli bir alan.'];
       const title = $('h3', row).textContent;
       rows.forEach(other => { if (other !== row) other.open = false; });
-      $('#spotlight-number').textContent = `${$('.service-no', row).textContent} / 08`;
+      $('#spotlight-number').textContent = `${$('.service-no', row).textContent} / 06`;
       $('#spotlight-category').textContent = category;
       $('#spotlight-title').textContent = title;
       $('#spotlight-text').textContent = text;
       const link = $('#spotlight-link');
-      link.dataset.topic = $('[data-topic]', row).dataset.topic;
-      link.setAttribute('aria-label', `${title} için randevu talebi`);
+      if (link) {
+        link.dataset.topic = $('[data-topic]', row)?.dataset.topic || '';
+        link.setAttribute('aria-label', `${title} için randevu talebi`);
+      }
     }
     rows.forEach(row => row.addEventListener('toggle', () => { if (row.open) selectRow(row); }));
     $$('#service-filters button').forEach(button => button.addEventListener('click', () => {
