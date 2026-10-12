@@ -3,8 +3,22 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  document.documentElement.classList.add('intro-ready');
-  document.body?.classList.remove('intro-locked');
+  const splash = $('#splash');
+  let introDone = false;
+  function finishIntro() {
+    if (introDone) return;
+    introDone = true;
+    document.documentElement.classList.add('intro-ready');
+    document.body?.classList.remove('intro-locked');
+    splash?.classList.add('is-leaving');
+    try { sessionStorage.setItem('ilayda-intro', 'seen'); } catch {}
+    window.setTimeout(() => splash?.remove(), reduced ? 30 : 900);
+  }
+  let seenIntro = false;
+  try { seenIntro = sessionStorage.getItem('ilayda-intro') === 'seen'; } catch {}
+  window.setTimeout(finishIntro, reduced || seenIntro ? 30 : 1400);
+  $('#splash-skip')?.addEventListener('click', finishIntro);
+  document.addEventListener('keydown', event => { if (event.key === 'Tab' || event.key === 'Escape') finishIntro(); });
 
   function initMenu() {
     const menu = $('#mobile-menu'), toggle = $('#menu-toggle');
