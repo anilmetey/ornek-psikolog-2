@@ -14,7 +14,7 @@
     try { sessionStorage.setItem('ilayda-intro', 'seen'); } catch {}
     window.setTimeout(() => splash?.remove(), reduced ? 30 : 1300);
   }
-  window.setTimeout(finishIntro, reduced ? 30 : 3800);
+  window.setTimeout(finishIntro, reduced ? 30 : 2500);
   $('#splash-skip')?.addEventListener('click', finishIntro);
   document.addEventListener('keydown', event => { if (event.key === 'Tab' || event.key === 'Escape') finishIntro(); });
 
