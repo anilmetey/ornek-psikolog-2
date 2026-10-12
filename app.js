@@ -12,11 +12,9 @@
     document.body?.classList.remove('intro-locked');
     splash?.classList.add('is-leaving');
     try { sessionStorage.setItem('ilayda-intro', 'seen'); } catch {}
-    window.setTimeout(() => splash?.remove(), reduced ? 30 : 900);
+    window.setTimeout(() => splash?.remove(), reduced ? 30 : 1300);
   }
-  let seenIntro = false;
-  try { seenIntro = sessionStorage.getItem('ilayda-intro') === 'seen'; } catch {}
-  window.setTimeout(finishIntro, reduced || seenIntro ? 30 : 1400);
+  window.setTimeout(finishIntro, reduced ? 30 : 3800);
   $('#splash-skip')?.addEventListener('click', finishIntro);
   document.addEventListener('keydown', event => { if (event.key === 'Tab' || event.key === 'Escape') finishIntro(); });
 
