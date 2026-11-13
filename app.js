@@ -360,6 +360,35 @@
     });
   }
 
+  function initReels() {
+    $$('.reel-load').forEach(button => {
+      button.addEventListener('click', () => {
+        const frame = button.closest('.reel-frame');
+        const src = button.dataset.reelSrc;
+        if (!frame || !src) return;
+
+        const iframe = document.createElement('iframe');
+        iframe.src = src;
+        iframe.title = button.dataset.reelTitle || 'Instagram videosu';
+        iframe.allow = 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+        iframe.loading = 'eager';
+
+        const status = document.createElement('span');
+        status.className = 'reel-loading';
+        status.setAttribute('role', 'status');
+        status.textContent = 'Instagram videosu yükleniyor…';
+        frame.classList.add('is-loading');
+        frame.replaceChildren(iframe, status);
+        iframe.addEventListener('load', () => {
+          frame.classList.remove('is-loading');
+          status.remove();
+        }, { once: true });
+      });
+    });
+  }
+
   function initTraining() {
     const training = $('.training');
     if (!training) return;
@@ -370,7 +399,7 @@
     });
   }
 
-  [initMenu, initScroll, initServices, initTraining, initBreathing, initContact].forEach(init => {
+  [initMenu, initScroll, initServices, initTraining, initBreathing, initContact, initReels].forEach(init => {
     try { init(); } catch (error) { console.error('Interface initialization:', error); }
   });
 })();
